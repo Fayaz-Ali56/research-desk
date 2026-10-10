@@ -1,0 +1,13 @@
+{
+  "name": "research-desk",
+  "version": "1.0.0",
+  "description": "A local, private AI research assistant for physics students and researchers. No dependencies, no build step.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check-keys": "node check-key.js"
+  },
+  "engines": { "node": ">=18" },
+  "keywords": ["physics", "research", "chatbot", "llm", "local-first", "gemini", "openrouter", "ollama"],
+  "license": "MIT"
+}

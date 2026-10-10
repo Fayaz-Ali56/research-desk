@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Research desk</title>
+<link rel="stylesheet" href="/styles.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%230E141B'/><rect x='3' y='3' width='1.5' height='10' fill='%239B6FE0'/><rect x='6' y='3' width='1.5' height='10' fill='%234FC3E8'/><rect x='9' y='3' width='1.5' height='10' fill='%23E8B23A'/><rect x='12' y='3' width='1.5' height='10' fill='%23E8534A'/></svg>" />
+<!-- Optional: proper LaTeX rendering. Falls back to Unicode if offline. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+</head>
+<body>
+
+<div class="spectrum" aria-hidden="true">
+  <span style="--line:var(--violet); flex:3"></span>
+  <span style="--line:var(--indigo); flex:2"></span>
+  <span style="--line:var(--cyan);   flex:5"></span>
+  <span style="--line:var(--amber);  flex:2"></span>
+  <span style="--line:var(--red);    flex:8"></span>
+</div>
+
+<div class="shell">
+
+  <aside class="rail" id="rail">
+    <header class="rail-head">
+      <h1>Research desk</h1>
+      <p id="provider-line">connecting…</p>
+    </header>
+
+    <button class="new-thread" id="new-thread">New thread</button>
+
+    <nav class="modes" id="modes" aria-label="Working modes"></nav>
+
+    <div class="papers" id="papers-block" hidden>
+      <h2>Papers in this thread</h2>
+      <ul id="papers-list"></ul>
+    </div>
+
+    <div class="threads">
+      <h2>Recent</h2>
+      <ul id="thread-list"></ul>
+    </div>
+
+    <footer class="rail-foot">
+      <button id="search-toggle" class="toggle" aria-pressed="false">
+        <span class="dot"></span> Search the literature
+      </button>
+      <button id="export" class="quiet">Export this thread</button>
+      <button id="open-setup" class="quiet">Change model or key</button>
+    </footer>
+  </aside>
+
+  <main class="stage">
+    <div class="topbar">
+      <button id="rail-open" class="icon-btn" aria-label="Show threads">☰</button>
+      <span id="mode-caption"></span>
+      <button id="new-thread-mobile" class="icon-btn" aria-label="New thread">+</button>
+    </div>
+
+    <div class="scroll" id="scroll">
+      <div class="column" id="column">
+        <section class="welcome" id="welcome">
+          <h2>What are you working on today?</h2>
+          <p>Attach a paper to question it directly, or start here.</p>
+          <div class="starters" id="starters"></div>
+        </section>
+        <div class="thread" id="thread"></div>
+      </div>
+    </div>
+
+    <div class="composer-wrap">
+      <div class="column">
+        <div class="notice" id="notice" hidden></div>
+        <div class="composer" id="composer">
+          <button id="attach" class="icon-btn" aria-label="Attach a PDF" title="Attach a PDF">
+            <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M13 7 8 12a2 2 0 0 0 3 3l5-5a4 4 0 0 0-6-6L5 9a6 6 0 0 0 8 8" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <input type="file" id="file" accept="application/pdf" multiple hidden />
+          <textarea id="input" rows="1" placeholder="Ask a question"></textarea>
+          <button id="send" class="send" aria-label="Send" disabled>
+            <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M3 10h13M11 5l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <p class="disclaimer">Verify every derivation and reference before you use it.</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<div class="setup" id="setup" hidden>
+  <div class="setup-card">
+    <div class="spectrum inline" aria-hidden="true">
+      <span style="--line:var(--violet); flex:3"></span>
+      <span style="--line:var(--indigo); flex:2"></span>
+      <span style="--line:var(--cyan);   flex:5"></span>
+      <span style="--line:var(--amber);  flex:2"></span>
+      <span style="--line:var(--red);    flex:8"></span>
+    </div>
+    <h2 id="setup-title">One thing before you start</h2>
+    <p id="setup-intro">Pick where the answers come from, and paste the key. It's saved on this
+      computer only — it never leaves it.</p>
+
+    <div class="choices" id="setup-choices"></div>
+
+    <label class="field" id="name-field">
+      <span>Whose desk is this?</span>
+      <input type="text" id="name-input" placeholder="a name — shown at the top" autocomplete="off" />
+    </label>
+
+    <label class="field" id="key-field">
+      <span id="key-label">API key</span>
+      <input type="password" id="key-input" placeholder="paste it here" autocomplete="off" spellcheck="false" />
+    </label>
+
+    <label class="field" id="base-field" hidden>
+      <span>Address of the service</span>
+      <input type="text" id="base-input" placeholder="https://example.com/v1" autocomplete="off" spellcheck="false" />
+    </label>
+
+    <label class="field" id="model-field">
+      <span>Model</span>
+      <input type="text" id="model-input" autocomplete="off" spellcheck="false" />
+    </label>
+
+    <p class="hint-line" id="key-hint"></p>
+    <div class="setup-error" id="setup-error" hidden></div>
+
+    <div class="setup-actions">
+      <button class="primary" id="setup-save">Save and start</button>
+      <button class="quiet" id="setup-close" hidden>Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>

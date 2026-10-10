@@ -1,0 +1,7 @@
+# Secrets and personal data — never commit these
+.env
+data/
+
+node_modules/
+.DS_Store
+Thumbs.db
